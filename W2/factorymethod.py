@@ -22,7 +22,7 @@ class SeaLogistic(Logistic):
 class RoadLogistic(Logistic):
 
     def transaction_element_creator(self):
-        return RoadLogistic()
+        return RoadProduct()
 
 
 class Product(ABC):
@@ -48,9 +48,9 @@ def client():
     sea_elem = SeaLogistic()
     sea_elem.delivery("bar kharbozeh")
 
-    # print("bar baraye jadeh")
-    # road_elem = RoadLogistic()
-    # road_elem.delivery("tirahan")
+    print("bar baraye jadeh")
+    road_elem = RoadLogistic()
+    road_elem.delivery("tirahan")
 
 
 if __name__ == "__main__":
