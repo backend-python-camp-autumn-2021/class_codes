@@ -23,7 +23,6 @@
 # print(isinstance(A, object))
 
 
-
 # class MetaA(type):
 #     name = 'ALi'
 
@@ -36,19 +35,15 @@
 # print(TestMeta.name)
 
 
-
 # class A:
 #     def arian(self):
 #         print("salam Pedar!")
-
-
 
 
 # class B(A):
 #     def arian(self):
 #         print("salam Pesar")
 #         super().arian()
-
 
 
 # b = B()
@@ -74,9 +69,7 @@ class BaKelass(metaclass=MetaBaKelas):
         print(f"manam call {name}")
 
 
-
 obj = BaKelass()
 # obj("ashkan")
 # obj("mehrdad")
 # obj("shahgayegh")
-
