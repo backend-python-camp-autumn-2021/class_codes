@@ -1,8 +1,10 @@
+import json
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Category
+from .models import Article, Category, User, Author
 
 
 @csrf_exempt
@@ -51,5 +53,33 @@ def article(request, slug=None):
         return JsonResponse(result)
 
 
+@csrf_exempt
 def article_create(request):
-    pass
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username", None)
+        password = data.get("password", None)
+        if username and password:
+            user_obj = get_object_or_404(User, username=username)
+            if user_obj.password == password:
+                if Author.objects.filter(user=user_obj).exists():
+                    author = Author.objects.get(user=user_obj)
+                    category = data.pop("category")
+                    region = data.pop("region")
+                    data.pop("username")
+                    data.pop("password")
+                    # TODO cat multiple, exception handling(just get, if not exist error)
+                    cat_obj = Category.objects.get(
+                        name=category, region=region)
+                    article = Article.objects.create(**data, author=author)
+                    article.category.add(cat_obj)
+                    article.save()
+                else:
+                    return JsonResponse({"status": "shoma mojaz be maghale neveshtan nistid"})
+            else:
+                return JsonResponse({"status": "shalgham passeto dorost bezan"})
+
+        else:
+            return JsonResponse({"status": "username and pass needed!"})
+
+    return JsonResponse({"status": "just post method"})

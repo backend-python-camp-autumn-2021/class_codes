@@ -16,6 +16,10 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+    def save(self, *args, **kwargs):
+        self.username = self.username.lower()
+        return super().save(*args, **kwargs)
+
 
 class Author(models.Model):
     nick_name = models.CharField(max_length=255)
