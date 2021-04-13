@@ -1,6 +1,7 @@
-from django.db import models
+from django.db import models, connection
 from django.core.validators import RegexValidator
 from django.utils.text import slugify
+from django.urls import reverse
 
 
 class User(models.Model):
@@ -59,8 +60,18 @@ class Article(models.Model):
     context = models.TextField()
     seen_num = models.IntegerField(default=0)
     category = models.ManyToManyField(Category)
-    rate = models.FloatField(default=5)
+    # rate = models.FloatField(default=5)
     slug = models.SlugField(unique=True, null=True, blank=True)
+
+    @property
+    def number_of_comments(self):
+        "Returns the person's full name."
+        length = len(self.comment.all())
+        return f'{length}'
+
+    @property
+    def abstract_context(self):
+        return f'{self.context[:25]}'
 
     def __str__(self):
         return self.title[:50]
@@ -70,11 +81,49 @@ class Article(models.Model):
             self.slug = slugify(self.title, allow_unicode=True)
         return super().save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse("article_detail", kwargs={"slug": self.slug})
+
 
 class Comment(models.Model):
     name = models.CharField(max_length=255)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    article = models.ForeignKey(
+        Article, related_name='comment', on_delete=models.CASCADE)
     comment_text = models.TextField()
+    rate = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+
+class PersonTehranManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(frrom='tehran')
+
+    # TODO
+    # @classmethod
+    # def truncate(self):
+    #     with connection.cursor() as cnc:
+    #         cnc.execute(f"DELETE FROM '{cls._meta.db_table}'")
+
+
+class Person(models.Model):
+    name = models.CharField(primary_key=True, max_length=255)
+    frrom = models.CharField(default="tehran", max_length=255)
+    age = models.SmallIntegerField(null=True, blank=True)
+
+    bachetehran = PersonTehranManager()
+    objects = models.Manager()
+
+    # @classmethod
+    # def truncate(self):
+    #     with connection.cursor() as cnc:
+    #         cnc.execute(f"DELETE FROM '{cls._meta.db_table}'")
+
+    class Meta:
+        ordering = ['-name', '-age']
+        unique_together = [['frrom', 'age']]
+
+
+class A(Person):
+    address = models.CharField(max_length=255)

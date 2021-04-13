@@ -41,7 +41,24 @@ def show_articles(request):
     return JsonResponse(result, safe=False)
 
 
-def article(request, slug=None):
+def article_list(request):
+    if request.method == 'GET':
+        query_set = Article.objects.all()
+        print(request.session['name'])
+        result = []
+        for article in query_set:
+
+            result.append({
+                "title": article.title,
+                "author": article.author.nick_name,
+                "context": article.context,
+                "published": article.date_pub,
+                "path": article.get_absolute_url(),
+            })
+        return JsonResponse(result, safe=False)
+
+
+def article_detail(request, slug=None):
     if request.method == 'GET':
         article = get_object_or_404(Article, slug=slug)
         result = {
@@ -50,6 +67,36 @@ def article(request, slug=None):
             "context": article.context,
             "published": article.date_pub,
         }
+
+        print(request.session)
+        request.session['name'] = 'ashkan'
+
+        if not request.session.get('seen', None):
+            request.session['seen'] = []
+            request.session['seen'].append(article.slug)
+            article.seen_num += 1
+            article.save()
+        elif article.slug not in request.session['seen']:
+            request.session['seen'].append(article.slug)
+            article.seen_num += 1
+            article.save()
+
+        # TODO
+        # print(str(article.slug))
+        # if not request.COOKIES.get('seen', None):
+        #     response = JsonResponse(result)
+        #     response.set_cookie('seen', [str(article.slug)])
+        #     article.seen_num += 1
+        #     article.save()
+        #     return response
+        # elif article.slug not in request.COOKIES['seen']:
+        #     response = JsonResponse(result)
+        #     new_seen = request.COOKIES['seen']
+        #     new_seen.append([str(article.slug)])
+        #     response.set_cookie('seen', new_seen)
+        #     article.seen_num += 1
+        #     article.save()
+
         return JsonResponse(result)
 
 
@@ -83,3 +130,11 @@ def article_create(request):
             return JsonResponse({"status": "username and pass needed!"})
 
     return JsonResponse({"status": "just post method"})
+
+
+def article_update(request):
+    pass
+
+
+def article_delete(request):
+    pass
