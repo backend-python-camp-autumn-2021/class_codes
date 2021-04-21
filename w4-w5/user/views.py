@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
@@ -32,6 +33,7 @@ class Login(View):
             user = authenticate(request, email=username, password=password)
             if user:
                 login(request, user)
+                messages.success(request, "login successfully!")
                 next_url = request.GET.get('next', None)
                 if next_url:
                     return redirect(next_url)
@@ -74,9 +76,7 @@ def logout_view(request):
 #     return HttpResponse('raghs harameh!')
 
 def login_view(request):
-    if request.method == "GET":
-        return render(request,  "user/login.html",{} )
-    elif request.method == "POST":
+    if request.method == "POST":
         email = request.POST.get("email", None)
         if email:
             password = request.POST.get('password', None)
@@ -90,10 +90,13 @@ def login_view(request):
         else:
             return HttpResponse("email ro bezar")
 
+
+def user_view(request):
+    return render(request, "user/user.html", {})
+
+
 def signup(request):
-    if request.method == "GET":
-        return render(request,  "user/signup.html",{} )
-    elif request.method == "POST":
+    if request.method == "POST":
         email = request.POST.get("email", None)
         phone = request.POST.get("phone", None)
         if email:
@@ -103,10 +106,12 @@ def signup(request):
                 if password == repeated_passweord:
                     try:
                         User.objects.create_user(email=email, password=password, phone=phone)
-                        return redirect('login')
+                        messages.success(request, "Register Successfully!")
+                        return redirect('user-view')
                     except IntegrityError as e:
-                        return render(request, "user/error.html", {"message": e})
-
+                        # return render(request, "user/error.html", {"message": e})
+                        messages.error(request, f"{e}")
+                        return redirect('user-view')
                 else:
                     return HttpResponse("pass va tekraresh equal nistan")
 
