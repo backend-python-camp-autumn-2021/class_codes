@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>صفحه ثبت نام</title>
+    </head>
+
+    <body>
+{% if user.is_authenticated %}
+    <button><a href="{% url 'logout'  %}">logout</a></button>
+    {% else %}
+    <form action="/profile/signup/" , method="post">
+            {% csrf_token %}
+            <label>Email: </label><input type="email" name="email" required><br><br>
+            <label>password: </label><input type="password" name="password" required><br><br>
+            <label>repeat_password: </label><input type="password" name="repeat_password" required><br><br>
+            <label>phone: </label><input type="text" name="phone" required><br><br>
+            <input type="submit">
+        </form>
+{% endif %}
+    </body>
+
+</html>

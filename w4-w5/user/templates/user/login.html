@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>صفحه ورود</title>
+    </head>
+
+    <body>
+
+{% if user.is_authenticated %}
+    <button><a href="{% url 'logout'  %}">logout</a></button>
+    {% else %}
+{#    <form action="/profile/login/" , method="post">#}
+{#            {% csrf_token %}#}
+{#            <label>Email: </label><input type="email" name="email"><br><br>#}
+{#            <label>password: </label><input type="password" name="password"><br><br>#}
+{#            <input type="submit">#}
+{#        </form>#}
+    <form action="/profile/login/"  method="post">
+    {% csrf_token %}
+        {{ form.as_table }}
+        <input type="submit">
+    </form>
+{% endif %}
+    </body>
+
+</html>
