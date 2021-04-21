@@ -1,10 +1,14 @@
 import json
+import logging
+import datetime
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Article, Category, User, Author
+
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
@@ -42,18 +46,28 @@ def show_articles(request):
 
 
 def article_list(request):
+    logger.warning(
+        f"karbar ba {request.META.get('REMOTE_ADDR')} be system vasl shod")
     if request.method == 'GET':
-        query_set = Article.objects.all()
-        print(request.session['name'])
+        # query_set = Article.objects.all()
+        # query_set = Article.objects.filter(
+        #     title__startswith='hello') | Article.objects.filter(title__startswith='bye')
+
+        query_set = Article.objects.prefetch_related('category').filter(
+            date_pub__day__gt=datetime.datetime.today().day - 20).filter(title__startswith="hello")
+
         result = []
         for article in query_set:
-
+            article_cats = []
+            for cat_item in article.category.all():
+                article_cats.append(cat_item.name)
             result.append({
                 "title": article.title,
                 "author": article.author.nick_name,
                 "context": article.context,
                 "published": article.date_pub,
                 "path": article.get_absolute_url(),
+                "cats": article_cats
             })
         return JsonResponse(result, safe=False)
 
@@ -100,7 +114,7 @@ def article_detail(request, slug=None):
         return JsonResponse(result)
 
 
-@csrf_exempt
+@ csrf_exempt
 def article_create(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -138,3 +152,32 @@ def article_update(request):
 
 def article_delete(request):
     pass
+
+
+class A:
+    def __init__(self, age):
+        self.age = age
+
+    def ghol_mehrdad(self):
+        return "nadidan bad panjah be sharte nabudan shaghayegh"
+
+
+def index(request):
+    print(request.POST)
+    a = A(60)
+    context = {'age': a}
+    return render(request, 'index.html', context)
+
+
+def home(request):
+    query_set = Article.objects.select_related('author').all()
+    result = []
+    for article in query_set:
+        result.append({
+            "title": article.title,
+            # "author": article.author.nick_name,
+            "context": article.context,
+            "published": article.date_pub,
+            "path": article.get_absolute_url(),
+        })
+    return render(request, 'home.html', {'articles': result})

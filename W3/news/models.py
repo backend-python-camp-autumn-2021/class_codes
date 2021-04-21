@@ -2,6 +2,7 @@ from django.db import models, connection
 from django.core.validators import RegexValidator
 from django.utils.text import slugify
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class User(models.Model):
@@ -127,3 +128,40 @@ class Person(models.Model):
 
 class A(Person):
     address = models.CharField(max_length=255)
+
+
+class Personkheng(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(Personkheng, through='Membership')
+
+    def __str__(self):
+        return self.name
+
+
+class Membership(models.Model):
+    person = models.ForeignKey(Personkheng, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    date_joined = models.DateField()
+    invite_reason = models.CharField(max_length=64)
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=50)
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product, through='CartItem')
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    qty = models.IntegerField()

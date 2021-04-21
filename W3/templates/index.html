@@ -1,0 +1,34 @@
+{% load static %}
+
+<html>
+
+    <head>
+
+        <link rel="stylesheet" href="{% static "css/style.css" %}">
+
+    </head>
+
+    <body>
+
+
+        <div class="hello">
+            <h1>Hellooooooooooooooo</h1>
+        </div>
+
+        <p>lkebglkewglkeqbg</p>
+
+        <p id="test">mehrdad</p>
+
+        <p class="hello" id="test">Afshin</p>
+        <h1>{{age.ghol_mehrdad}}</h1>
+
+        <form action="/a/" method="get">
+            {% csrf_token %}
+            <input type="text" name="hello">
+            <input type="text" name="name">
+            <input type="submit" value="send">
+        </form>
+
+    </body>
+
+</html>

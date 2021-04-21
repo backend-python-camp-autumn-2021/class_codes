@@ -1,0 +1,33 @@
+body {
+    background-color: sandybrown;
+    font-family: "Times New Roman", Times, serif;
+    /* direction: rtl; */
+}
+
+p {
+    color: red;
+}
+
+#test {
+    color: purple;
+    background-color: salmon;
+}
+
+.hello {
+    font-size: large;
+    background-color: blue;
+    padding: 5px 50px;
+    margin: 5px;
+    border: brown;
+    border-style: solid;
+    border-width: 10px;
+}
+
+p.hello {
+    font-size: 50px;
+    text-align: center;
+}
+
+.btn-card {
+    display: inline-block;
+}

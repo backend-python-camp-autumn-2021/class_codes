@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Article, Author, User, Category, Comment
+from .models import Article, Author, User, Category, Comment, Personkheng, Group, Membership
 
 
 class CommentInline(admin.StackedInline):
@@ -26,10 +26,7 @@ class ArticleAdmin(admin.ModelAdmin):
             'fields': ('title', 'author', 'context')
         }),
         ('Detail', {
-            'fields': ('seen_num', 'rate'),
-        }),
-        ('Category', {
-            'fields': ('category',),
+            'fields': ('seen_num', 'category'),
         }),
 
     )
@@ -44,3 +41,6 @@ admin.site.register(Author)
 admin.site.register(User, UserAdmin)
 admin.site.register(Category)
 admin.site.register(Comment)
+admin.site.register(Personkheng)
+admin.site.register(Group)
+admin.site.register(Membership)
