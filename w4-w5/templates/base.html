@@ -18,7 +18,7 @@
                 {% include 'header.html' %}
             </div>
         {% if user.is_authenticated %}
-            <p>hello {{ user.email |truncatechars:5 }}</p>
+            <p>hello {{ user.email }}</p>
         {% endif %}
         {% if messages %}
             <div  class="messages">

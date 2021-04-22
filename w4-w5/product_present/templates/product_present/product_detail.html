@@ -1,4 +1,5 @@
 {% extends "product_present/base_product_site.html" %}
+{% load product_tags %}
 
 {% block handproduct %}
     <h1>name: {{ hand_product.name }}</h1>
@@ -12,6 +13,8 @@
     <p>discription: {{ hand_product.description }}</p>
     <p>city: {{ hand_product.city.city }}</p>
     <p>suplier: {{ hand_product.supplier.nickname }}</p>
+    <p>price: {{ hand_product.price |comma_seperator }}</p>
+    <p>rate: {% product_rate hand_product.id %}</p>
     <h3>comments: </h3>
     <ul>
     {% for comment in hand_product.comment.all %}

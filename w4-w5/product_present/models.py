@@ -28,7 +28,7 @@ class HandProduct(models.Model):
     category = models.ForeignKey(HandProductCat , on_delete=models.CASCADE, related_name='hand_product')
     city = models.ForeignKey(HandProductCity, on_delete=models.CASCADE, related_name="hand_product")
     supplier = models.ForeignKey(HandProductSuplier, on_delete=models.CASCADE)
-    price = models.FloatField()
+    price = models.IntegerField()
     img_one = models.ImageField(upload_to="hand_product/")
     img_two = models.ImageField(upload_to="hand_product/", null=True, blank=True)
     img_three = models.ImageField(upload_to="hand_product/", null=True, blank=True)
