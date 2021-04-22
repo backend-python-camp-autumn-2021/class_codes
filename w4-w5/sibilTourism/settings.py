@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'user',
+    'product_present',
 ]
 
 AUTH_USER_MODEL = 'user.User'
@@ -125,3 +126,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS =[
     BASE_DIR / 'static',
 ]
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'

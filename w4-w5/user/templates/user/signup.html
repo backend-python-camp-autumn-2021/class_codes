@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-    <h1>You are Logined as user : {{ request.user }}</h1>
+    <h1>You are Logined as user : {{ request.user}}</h1>
     <button><a href="{% url 'logout'  %}">logout</a></button>
     {% else %}
 

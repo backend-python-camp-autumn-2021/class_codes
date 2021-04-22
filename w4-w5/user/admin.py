@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib import admin
 
-from .models import Profile, UserAddress
+from .models import Profile, UserAddress, HandProductSuplier
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
@@ -29,12 +29,12 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('is_staff',)
     ordering = ('email',)
 
-
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone')
-    # exclude = ['image']
-    form = ProfileForm
-    list_editable = ('phone',)
+#
+# class ProfileAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'phone')
+#     # exclude = ['image']
+#     form = ProfileForm
+#     list_editable = ('phone',)
 
     # def save_form(self, request, form, change):
     #     messages.add_message(request, messages.ERROR, 'SHALGHAM.')
@@ -47,5 +47,6 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Profile)
 admin.site.register(UserAddress)
+admin.site.register(HandProductSuplier)

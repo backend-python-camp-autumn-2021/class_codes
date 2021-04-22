@@ -17,6 +17,9 @@
             <div class="sticky-top">
                 {% include 'header.html' %}
             </div>
+        {% if user.is_authenticated %}
+            <p>hello {{ user.email |truncatechars:5 }}</p>
+        {% endif %}
         {% if messages %}
             <div  class="messages">
                 <ul>

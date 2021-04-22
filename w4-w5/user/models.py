@@ -48,11 +48,11 @@ class User(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.RESTRICT)
-    phone = models.CharField(max_length=11, unique=True)
-    image = models.ImageField(upload_to='profile/', null=True, blank=True)
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.RESTRICT, related_name='profile')
+    phone = models.CharField(max_length=11, unique=True)
+    image = models.ImageField(upload_to='profile/', null=True)
 
     def __str__(self):
         return self.user.email
@@ -72,6 +72,22 @@ class Profile(models.Model):
 class UserAddress(models.Model):
     user = models.ForeignKey(
         Profile, related_name='address', on_delete=models.CASCADE)
-
+    city = models.CharField('استان', max_length=50)
     def __str__(self):
-        return f"{self.user.user.username} - priority: {self.priority_address}"
+        return f"{self.user.user.email} - city: {self.city}"
+    
+class PriorityUserAddress(models.Model):
+    """
+
+    """
+    user = models.OneToOneField(Profile, related_name='priority_address', on_delete=models.CASCADE)
+    address = models.OneToOneField(UserAddress, related_name='priority_address', on_delete=models.CASCADE)
+
+
+class HandProductSuplier(models.Model):
+    user = models.OneToOneField(User, on_delete=models.RESTRICT)
+    state = models.CharField('استان', max_length=255)
+    city = models.CharField('شهر', max_length=255)
+    street = models.CharField('خیابان', max_length=255)
+    alley = models.CharField('کوچه', max_length=255)
+    number = models.CharField('پلاک', max_length=255)

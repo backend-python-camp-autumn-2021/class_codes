@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from . import  models
+
+
+admin.site.register(models.HandProduct)
+admin.site.register(models.HandProductCity)
+admin.site.register(models.HandProductCat)
+admin.site.register(models.HandProductComment)
