@@ -86,8 +86,12 @@ class PriorityUserAddress(models.Model):
 
 class HandProductSuplier(models.Model):
     user = models.OneToOneField(User, on_delete=models.RESTRICT)
+    nickname = models.CharField(max_length=255, null=True, blank=True)
     state = models.CharField('استان', max_length=255)
     city = models.CharField('شهر', max_length=255)
     street = models.CharField('خیابان', max_length=255)
     alley = models.CharField('کوچه', max_length=255)
     number = models.CharField('پلاک', max_length=255)
+
+    def __str__(self):
+        return self.nickname

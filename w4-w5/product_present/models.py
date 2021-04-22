@@ -1,14 +1,25 @@
 from django.db import models
+from django.utils.text import slugify
+from django.contrib.auth import get_user_model
 
 from user.models import HandProductSuplier
+from .validators import file_size_validator
 
-from .validators import  file_size_validator
+User = get_user_model()
+
+
 class HandProductCat(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 
 class HandProductCity(models.Model):
     city = models.CharField(max_length = 255)
+
+    def __str__(self):
+        return self.city
 
 
 class HandProduct(models.Model):
@@ -22,8 +33,23 @@ class HandProduct(models.Model):
     img_two = models.ImageField(upload_to="hand_product/", null=True, blank=True)
     img_three = models.ImageField(upload_to="hand_product/", null=True, blank=True)
     video_description = models.FileField(upload_to='hand_product_video/', null=True, blank=True, validators=[file_size_validator])
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        return super().save( *args, **kwargs)
+
 
 class HandProductComment(models.Model):
     hand_product= models.ForeignKey(HandProduct, on_delete=models.CASCADE, related_name='comment')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField(null=True, blank=True)
     rate = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"comment by {self.user.email}"
+

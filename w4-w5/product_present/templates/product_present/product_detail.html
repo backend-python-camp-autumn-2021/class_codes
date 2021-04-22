@@ -1,0 +1,21 @@
+{% extends "product_present/base_product_site.html" %}
+
+{% block handproduct %}
+    <h1>name: {{ hand_product.name }}</h1>
+    <img src="{{ hand_product.img_one.url }}" width="250" height="150">
+    {% if hand_product.img_two %}
+        <img src="{{ hand_product.img_two.url }}" width="250" height="150">
+    {% endif %}
+    {% if hand_product.img_three %}
+        <img src="{{ hand_product.img_three.url }}" width="250" height="150">
+    {% endif %}
+    <p>discription: {{ hand_product.description }}</p>
+    <p>city: {{ hand_product.city.city }}</p>
+    <p>suplier: {{ hand_product.supplier.nickname }}</p>
+    <h3>comments: </h3>
+    <ul>
+    {% for comment in hand_product.comment.all %}
+        <li>user: {{ comment.user.email }} --> text: {{ comment.text }}</li>
+    {% endfor %}
+    </ul>
+{% endblock handproduct %}

@@ -1,0 +1,14 @@
+{% extends "product_present/base_product_site.html" %}
+
+{% block handproduct %}
+    <h1>Hand-Products</h1>
+    <ul>
+        {% for product in hand_products %}
+            <li><h2>name: {{ product.name }}</h2></li>
+            <li><img src="{{ product.img_one }}"></li>
+            <li><p>description: {{ product.description|truncatechars:25 }}</p></li>
+            <li>city: {{ product.city.city }}</li>
+            <li><a class="btn btn-primary" href="{% url 'hand-product-detail' product.slug %}">detail</a></li>
+        {% endfor %}
+    </ul>
+{% endblock handproduct %}
