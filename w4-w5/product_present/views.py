@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView, FormView
 
@@ -32,15 +32,21 @@ class HandProductDetailView(DetailView):
 
 
 class CommentFormView(LoginRequiredMixin, View):
-    def get(self, request):
-        form = CommentForm()
-        return render(request, "product_present/comment_change.html", {"form":form})
+    def get(self, request, id):
+        product = get_object_or_404(HandProduct, id = id)
+        if request.user.hand_product_comments.all().filter(hand_product=product).exists():
+            form = CommentForm(instance = request.user.hand_product_comments.all().get(hand_product=product))
+        else:
+            form = CommentForm()
+        return render(request, "product_present/comment_change.html", {"form":form , "id":id})
 
-    def post(self, request):
+    def post(self, request, id):
         form = CommentForm(request.POST)
         if form.is_valid():
             try:
                 form.instance.user = request.user
+                product = get_object_or_404(HandProduct, id=id)
+                form.instance.hand_product = product
                 form.save()
                 return HttpResponse("damet garm")
             except Exception as e:

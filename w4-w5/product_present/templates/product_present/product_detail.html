@@ -21,4 +21,5 @@
         <li>user: {{ comment.user.email }} --> text: {{ comment.text }}</li>
     {% endfor %}
     </ul>
+    <button><a href="{% url 'comment-change' hand_product.id %}" >add commnet</a></button>
 {% endblock handproduct %}

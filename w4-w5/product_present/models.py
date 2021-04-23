@@ -47,7 +47,7 @@ class HandProduct(models.Model):
 
 class HandProductComment(models.Model):
     hand_product= models.ForeignKey(HandProduct, on_delete=models.CASCADE, related_name='comment')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="hand_product_comments")
     text = models.TextField(null=True, blank=True)
     rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
 

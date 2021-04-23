@@ -1,7 +1,7 @@
 <html>
 
 <body>
-    <form action="{% url 'comment-change' %}" method="post">
+    <form action="{% url 'comment-change' id %}" method="post">
         {% csrf_token %}
         {{ form.as_ul }}
         <input type="submit" value="send">
