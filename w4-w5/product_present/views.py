@@ -12,7 +12,7 @@ class HandProductListView(ListView):
     model = HandProduct
     template_name = "product_present/product_list.html"
     context_object_name = 'hand_products'
-    paginate_by = 1
+    paginate_by = 10
     # queryset = HandProduct.objects.filter(category__name="خوراکی")
 
     # def get_queryset(self):
@@ -41,9 +41,14 @@ class CommentFormView(LoginRequiredMixin, View):
         return render(request, "product_present/comment_change.html", {"form":form , "id":id})
 
     def post(self, request, id):
-        form = CommentForm(request.POST or None, instance=get_object_or_404( HandProductComment , user=request.user, hand_product = get_object_or_404(HandProduct, id=id)))
+        hand_product = get_object_or_404(HandProduct, id=id)
+        if request.user.hand_product_comments.all().filter(hand_product=hand_product).exists():
+            form = CommentForm(request.POST or None, instance=get_object_or_404( HandProductComment , user=request.user, hand_product = hand_product))
+        else:
+            form = CommentForm(request.POST)
+            form.instance.user = request.user
+            form.instance.hand_product = hand_product
         if form.is_valid():
-            print(form.instance)
             try:
                 form.save()
                 return HttpResponse("damet garm")
