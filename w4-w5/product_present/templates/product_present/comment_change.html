@@ -1,0 +1,11 @@
+<html>
+
+<body>
+    <form action="{% url 'comment-change' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_ul }}
+        <input type="submit" value="send">
+    </form>
+</body>
+
+</html>

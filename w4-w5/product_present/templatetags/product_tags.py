@@ -1,4 +1,5 @@
 from django import template
+from django.db import IntegrityError
 from django.db.models import Avg
 
 from product_present.models import HandProduct
@@ -14,7 +15,11 @@ def comma_seperator(value):
 
 @register.simple_tag
 def product_rate(data):
-    product = HandProduct.objects.get(id=data)
-    rate = product.comment.all().aggregate(product_rate=Avg('rate'))
+    try:
+        product = HandProduct.objects.get(id=data)
+        rate = product.comment.all().aggregate(product_rate=Avg('rate'))
+    except IntegrityError as e:
+        raise str(e)
+
     return rate['product_rate']
 

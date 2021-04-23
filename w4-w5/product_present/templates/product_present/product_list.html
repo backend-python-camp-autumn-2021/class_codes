@@ -27,5 +27,17 @@
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
+ <form action="{% url 'hand-product-list' %}" method="get">
+    <select id="pagination" name="paginate_by" onchange="this.form.submit();">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+    </select>
+     </form>
+{#    <form action="{% url 'hand-product-list' %}" method="get">#}
+{#        {% csrf_token %}#}
+{#        <input type="text" name="paginate_by">#}
+{#        <input type="submit" value="send">#}
+{#    </form>#}
 </div>
 {% endblock handproduct %}
