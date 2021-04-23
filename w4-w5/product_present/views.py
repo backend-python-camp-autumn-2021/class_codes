@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView, FormView
 
-from .models import HandProduct
+from .models import HandProduct, HandProductComment
 from .forms import CommentForm
 
 class HandProductListView(ListView):
@@ -41,15 +41,12 @@ class CommentFormView(LoginRequiredMixin, View):
         return render(request, "product_present/comment_change.html", {"form":form , "id":id})
 
     def post(self, request, id):
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST or None, instance=get_object_or_404( HandProductComment , user=request.user, hand_product = get_object_or_404(HandProduct, id=id)))
         if form.is_valid():
+            print(form.instance)
             try:
-                form.instance.user = request.user
-                product = get_object_or_404(HandProduct, id=id)
-                form.instance.hand_product = product
                 form.save()
                 return HttpResponse("damet garm")
             except Exception as e:
                 raise IntegrityError(e)
-
         return render(request, "product_present/comment_change.html", {"form":form})
