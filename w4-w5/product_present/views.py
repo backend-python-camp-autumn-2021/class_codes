@@ -32,6 +32,8 @@ class HandProductDetailView(DetailView):
 
 
 class CommentFormView(LoginRequiredMixin, View):
+    login_url = '/profile/user/'
+
     def get(self, request, id):
         product = get_object_or_404(HandProduct, id = id)
         if request.user.hand_product_comments.all().filter(hand_product=product).exists():

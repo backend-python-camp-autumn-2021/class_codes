@@ -14,7 +14,7 @@ from .forms import LoginForm
 from .forms import CustomUserCreationForm
 
 User = get_user_model()
-#
+
 class Login(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -88,6 +88,8 @@ def login_view(request):
                 user = authenticate(request, email=email, password=password)
                 if user:
                     login(request, user)
+                    if request.GET.get('next_url',None):
+                        return redirect(request.GET.get('next_url'))
                     return redirect("home")
                 else:
                     return HttpResponse("user pass eshtebah")
@@ -96,7 +98,8 @@ def login_view(request):
 
 
 def user_view(request):
-    return render(request, "user/user.html", {})
+    next_url = request.GET.get('next', '')
+    return render(request, "user/user.html", { 'next_url': next_url})
 
 
 def signup(request):
