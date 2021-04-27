@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import logout_view, login_view, signup, Login, user_view, ProfileView, ProfileEdit
+from .views import (logout_view, login_view, signup, Login,
+                    user_view, ProfileView, ProfileEdit, gher_umdan, RegisterSuplier, ManageSuplierPageView)
 
 urlpatterns = [
     # path('login/', Login.as_view(), name='login'),
@@ -15,4 +16,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('information/', ProfileView.as_view(), name='logout'),
     path('edit/', ProfileEdit.as_view(), name='edit'),
+    path("gher_umadan/", gher_umdan),
+    path("register_suplier/", RegisterSuplier.as_view()),
+    path("suplier/", ManageSuplierPageView.as_view(), name="suplier-manage-page"),
 ]

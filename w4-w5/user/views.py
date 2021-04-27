@@ -1,8 +1,8 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,7 +10,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required, permission_required
 
-from .forms import LoginForm
+from .forms import LoginForm, SuplierCreateForm
+from .models import HandProductSuplier
 from .forms import CustomUserCreationForm
 
 User = get_user_model()
@@ -72,12 +73,12 @@ def logout_view(request):
     return redirect('user-view')
 
 #
-# @login_required(login_url='login')
-# # @permission_required('user_profile.can_dance',  raise_exception=True)
-# def gher_umdan(request):
-#     if request.user.has_perm('user_profile.can_dance'):
-#         return HttpResponse('Baba Karam!')
-#     return HttpResponse('raghs harameh!')
+@login_required(login_url='profile/user/')
+# @permission_required('user.can_dance',  raise_exception=True)
+def gher_umdan(request):
+    if request.user.has_perm('user.can_dance'):
+        return HttpResponse('Baba Karam!')
+    return HttpResponse('raghs harameh!')
 
 def login_view(request):
     if request.method == "POST":
@@ -143,3 +144,23 @@ class ProfileEdit(TemplateView):
         context = super().get_context_data(**kwargs)
         context['user_object'] = self.request.user
         return context
+
+
+class RegisterSuplier(CreateView):
+    model = HandProductSuplier
+    form_class = SuplierCreateForm
+    template_name = "user/create_suplier.html"
+    success_url = "/profile/user/"
+
+class ManageSuplierPageView(LoginRequiredMixin , View):
+    login_url = "profile/user"
+
+    def get(self, request):
+        # TODO exception
+        suplier = request.user.hand_product_suplier
+        products = suplier.handproduct_set.all()
+        context = {
+            "suplier": suplier,
+            "products": products,
+        }
+        return render(request, "user/manage_suplier_page.html", context)

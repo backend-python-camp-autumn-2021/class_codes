@@ -85,7 +85,7 @@ class PriorityUserAddress(models.Model):
 
 
 class HandProductSuplier(models.Model):
-    user = models.OneToOneField(User, on_delete=models.RESTRICT)
+    user = models.OneToOneField(User, related_name="hand_product_suplier", on_delete=models.RESTRICT)
     nickname = models.CharField(max_length=255, null=True, blank=True)
     state = models.CharField('استان', max_length=255)
     city = models.CharField('شهر', max_length=255)

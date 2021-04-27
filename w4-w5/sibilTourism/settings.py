@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'product_present',
 
 
-
 ]
 
 AUTH_USER_MODEL = 'user.User'

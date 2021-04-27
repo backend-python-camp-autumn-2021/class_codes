@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 
 
 def index(request):
-    return HttpResponse("Home page")
+    return HttpResponse(f"Home page {request.user.email}")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

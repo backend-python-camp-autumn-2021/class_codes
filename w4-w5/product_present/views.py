@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView, FormView
 
@@ -31,29 +33,35 @@ class HandProductDetailView(DetailView):
     context_object_name = 'hand_product'
 
 
-class CommentFormView(LoginRequiredMixin, View):
-    login_url = '/profile/user/'
+class CommentFormView(View):
+
+    @method_decorator(login_required(login_url="/profile/user/"))
+    def dispatch(self, request, *args, **kwargs):
+        self.hand_product = get_object_or_404(HandProduct, id = self.kwargs["id"])
+        if request.user.hand_product_comments.all().filter(hand_product=self.hand_product).exists():
+            self.comment_instance = request.user.hand_product_comments.all().get(hand_product=self.hand_product)
+        else:
+            self.comment_instance = None
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, id):
-        product = get_object_or_404(HandProduct, id = id)
-        if request.user.hand_product_comments.all().filter(hand_product=product).exists():
-            form = CommentForm(instance = request.user.hand_product_comments.all().get(hand_product=product))
+        if self.comment_instance:
+            form = CommentForm(instance = self.comment_instance)
         else:
             form = CommentForm()
         return render(request, "product_present/comment_change.html", {"form":form , "id":id})
 
     def post(self, request, id):
-        hand_product = get_object_or_404(HandProduct, id=id)
-        if request.user.hand_product_comments.all().filter(hand_product=hand_product).exists():
-            form = CommentForm(request.POST or None, instance=get_object_or_404( HandProductComment , user=request.user, hand_product = hand_product))
+        if self.comment_instance:
+            form = CommentForm(instance = self.comment_instance)
         else:
             form = CommentForm(request.POST)
             form.instance.user = request.user
-            form.instance.hand_product = hand_product
+            form.instance.hand_product = self.hand_product
         if form.is_valid():
             try:
                 form.save()
                 return HttpResponse("damet garm")
             except Exception as e:
                 raise IntegrityError(e)
-        return render(request, "product_present/comment_change.html", {"form":form})
+        return render(request, "product_present/comment_change.html", {"form":form, "id":id})
