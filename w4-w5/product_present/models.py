@@ -42,7 +42,7 @@ class HandProduct(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
-        return super().save( *args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class HandProductComment(models.Model):

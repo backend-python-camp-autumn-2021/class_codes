@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required, permission_required
 
 from .forms import LoginForm, SuplierCreateForm
-from .models import HandProductSuplier
+from .models import HandProductSuplier, Profile
 from .forms import CustomUserCreationForm
 
 User = get_user_model()
@@ -125,9 +125,14 @@ def signup(request):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
+    login_url = "/profile/user/"
     def get(self, request):
-        profile_object = request.user.profile
+        if Profile.objects.filter(user=request.user).exists():
+            profile_object = request.user.profile
+        else:
+            profile_object = Profile.objects.create(user=request.user)
+
         context = {
             'profile_object': profile_object,
         }
@@ -149,7 +154,7 @@ class ProfileEdit(TemplateView):
 class RegisterSuplier(CreateView):
     model = HandProductSuplier
     form_class = SuplierCreateForm
-    template_name = "user/create_suplier.html"
+    template_name = "user/create_supplier.html"
     success_url = "/profile/user/"
 
 class ManageSuplierPageView(LoginRequiredMixin , View):
@@ -157,10 +162,10 @@ class ManageSuplierPageView(LoginRequiredMixin , View):
 
     def get(self, request):
         # TODO exception
-        suplier = request.user.hand_product_suplier
+        supplier = request.user.hand_product_suplier
         products = suplier.handproduct_set.all()
         context = {
-            "suplier": suplier,
+            "supplier": supplier,
             "products": products,
         }
-        return render(request, "user/manage_suplier_page.html", context)
+        return render(request, "user/manage_supplier_page.html", context)

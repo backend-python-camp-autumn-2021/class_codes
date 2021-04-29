@@ -5,7 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<img src="{{ profile_object.image.url }}" alt='Ax Karbar' width="100" height="100" >
+{% if  profile_object.image %}
+<img src="{{ profile_object.image.url }}"  alt='Ax Karbar' width="100" height="100" >
+{% else %}
+    <img src="" alt='Ax Karbar' width="100" height="100" >
+
+{% endif %}
 <ul>
     <li>email: {{ user.email }}</li>
     <li>phone: {{ profile_object.phone }}</li>
