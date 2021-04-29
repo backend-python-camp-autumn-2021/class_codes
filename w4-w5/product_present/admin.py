@@ -6,6 +6,20 @@ from . import  models
 class HandProductModelAdmin(admin.ModelAdmin):
     exclude = ['slug']
 
+    def get_exclude(self, request, obj=None):
+        """
+        Hook for specifying exclude.
+        """
+        if request.user.is_superuser:
+            return self.exclude
+        else:
+            return self.exclude + ['supplier']
+
+    def save_model(self, request, obj, form, change):
+        if not form.fields.get('supplier', None):
+            obj.supplier = request.user.hand_product_suplier
+        return super().save_model(request, obj, form, change)
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
