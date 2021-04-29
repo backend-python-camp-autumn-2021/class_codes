@@ -1,9 +1,11 @@
 from django.urls import path
 
-from .views import HandProductListView, HandProductDetailView, CommentFormView
+from .views import HandProductListView, HandProductDetailView, CommentFormView, delete_comment_view
 
 urlpatterns = [
     path('handproducts/', HandProductListView.as_view(), name='hand-product-list'),
     path('handproduct/<str:slug>/', HandProductDetailView.as_view(), name='hand-product-detail'),
-    path('commnet/<int:id>', CommentFormView.as_view(), name='comment-change'),
+    path('commnet/<int:id>/', CommentFormView.as_view(), name='comment-change'),
+    # path('comment_delete/<int:id>/',delete_comment_view, name="comment-delete" )
+    # path('comment_delete/<int:id>/',CommentFormView.as_view(), name="comment-delete" )
 ]

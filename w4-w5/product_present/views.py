@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -65,3 +65,20 @@ class CommentFormView(View):
             except Exception as e:
                 raise IntegrityError(e)
         return render(request, "product_present/comment_change.html", {"form":form, "id":id})
+
+    def delete(self, request, id):
+
+        if self.comment_instance.user == request.user:
+            self.comment_instance.delete()
+            return HttpResponse("be khubi va khoshi hazfid!")
+        else:
+            return HttpResponseForbidden("<h1>403 Forbidden</h1>")
+
+
+def delete_comment_view(request, id):
+    comment = get_object_or_404(HandProductComment, id = id)
+    if comment.user == request.user:
+        comment.delete()
+        return HttpResponse("be khubi va khoshi hazfid!")
+    else:
+        return HttpResponseForbidden("<h1>403 Forbidden</h1>")

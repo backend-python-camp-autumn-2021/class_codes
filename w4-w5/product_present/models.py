@@ -54,3 +54,5 @@ class HandProductComment(models.Model):
     def __str__(self):
         return f"comment by {self.user.email}"
 
+    class Meta:
+        permissions = [('can_delete_comment', 'Can Delete Comment')]
