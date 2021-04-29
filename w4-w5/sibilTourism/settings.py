@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'user',
     'product_present',
+    'crispy_forms',
 
 
 ]
@@ -133,3 +134,5 @@ STATICFILES_DIRS =[
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -1,5 +1,5 @@
 from django.shortcuts import HttpResponse
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django import forms
 from django.db import IntegrityError
 from .models import Profile, User, HandProductSuplier
@@ -92,3 +92,11 @@ class SuplierCreateForm(forms.ModelForm):
                 raise Exception("pass1 va pass2 baiad barabar bashe")
         except:
             raise IntegrityError()
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="پسورد قدیمی",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'autofocus': True}),
+    )

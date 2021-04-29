@@ -5,12 +5,14 @@ from django.views import View
 from django.views.generic import TemplateView, CreateView
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required, permission_required
+from django.urls import reverse_lazy
 
-from .forms import LoginForm, SuplierCreateForm
+from .forms import LoginForm, SuplierCreateForm, CustomPasswordChangeForm
 from .models import HandProductSuplier, Profile
 from .forms import CustomUserCreationForm
 
@@ -169,3 +171,12 @@ class ManageSuplierPageView(LoginRequiredMixin , View):
             "products": products,
         }
         return render(request, "user/manage_supplier_page.html", context)
+
+
+class CustomChangePasswordView(PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+    success_url = reverse_lazy('user:password_change_ok')
+    template_name = 'user/password_change_form.html'
+
+def password_change_done(request):
+    return render(request, "user/password_change_done.html", {})

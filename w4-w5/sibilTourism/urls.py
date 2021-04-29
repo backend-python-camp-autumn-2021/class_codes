@@ -6,7 +6,6 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 def index(request):
     return HttpResponse(f"Home page {request.user.email}")
 
@@ -15,6 +14,7 @@ urlpatterns = [
     path('', index, name="home"),
     path('profile/',include("user.urls")),
     path('product_present/',include("product_present.urls")),
+    path("accounts/" , include("django.contrib.auth.urls")),
 ]
 
 if settings.DEBUG:
