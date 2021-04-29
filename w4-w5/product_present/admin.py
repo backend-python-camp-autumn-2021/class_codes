@@ -22,8 +22,6 @@ class HandProductModelAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
             return True
-        if request.user.is_superuser:
-            return True
         if obj is not None and obj.supplier.user != request.user:
             return False
         return True
