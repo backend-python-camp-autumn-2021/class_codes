@@ -73,6 +73,8 @@ class UserAddress(models.Model):
     user = models.ForeignKey(
         Profile, related_name='address', on_delete=models.CASCADE)
     city = models.CharField('استان', max_length=50)
+    priority = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.user.user.email} - city: {self.city}"
     

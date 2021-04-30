@@ -1,16 +1,49 @@
 {% extends "product_present/base_product_site.html" %}
 
 {% block handproduct %}
-    <h1>Hand-Products</h1>
-    <ul>
-        {% for product in hand_products %}
-            <li><h2>name: {{ product.name }}</h2></li>
-            <li><img src="{{ product.img_one.url }}" width="250" height="150"></li>
-            <li><p>description: {{ product.description|truncatechars:25 }}</p></li>
-            <li>city: {{ product.city.city }}</li>
-            <li><a class="btn btn-primary" href="{% url 'hand-product-detail' product.slug %}">detail</a></li>
+    <div style="display: inline-block" class="ml-3">
+        <h1>Hand-Products</h1>
+        <form method="get">
+            <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                            <label for="form-control">serch by name: </label>
+                             <input type="text" class="form-control mr-2" name="q" placeholder="Search">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="form-control">min price: </label><input type="text" class="form-control mr-2" name="min_price" placeholder="مثلا 20000">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                         <label for="form-control">max price: </label><input type="text" class="form-control mr-2" name="max_price" placeholder="مثلا 30000">
+                    </div>
+                                    <div class="col-md-3 mb-3">
+
+                        <div class="input-group-append">
+                        <button class="btn btn-success" type="submit">Search</button>
+                    </div>
+                                    </div>
+
+        </div>
+            </form>
+    </div>
+    </div>
+
+
+
+<div class="card-group">
+    {% for product in hand_products %}
+  <div class="card ml-3">
+      <img src="{{ product.img_one.url }}" class="card-img-top">
+               <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                   <p class="card-text">description: {{ product.description|truncatechars:25 }}</p>
+                   <p class="card-text"><small class="text-muted">city: {{ product.city.city }}</small></p>
+                   <p class="card-text"><small class="text-muted"> <a class="btn btn-primary mt-3" href="{% url 'hand-product-detail' product.slug %}">detail</a></small></p>
+                </div>
+  </div>
         {% endfor %}
-    </ul>
+    </div>
+    <br><br>
     <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -27,11 +60,12 @@
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
+    #TODO select active
  <form action="{% url 'hand-product-list' %}" method="get">
     <select id="pagination" name="paginate_by" onchange="this.form.submit();">
+        <option value="3">3</option>
+        <option value="5">5</option>
         <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="30">30</option>
     </select>
      </form>
 {#    <form action="{% url 'hand-product-list' %}" method="get">#}

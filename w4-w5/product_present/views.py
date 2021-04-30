@@ -10,16 +10,25 @@ from django.views.generic import ListView, DetailView, UpdateView, DeleteView, C
 from .models import HandProduct, HandProductComment
 from .forms import CommentForm
 
+
 class HandProductListView(ListView):
     model = HandProduct
     template_name = "product_present/product_list.html"
     context_object_name = 'hand_products'
-    paginate_by = 10
+    paginate_by = 3
     # queryset = HandProduct.objects.filter(category__name="خوراکی")
 
-    # def get_queryset(self):
-    #     query_set = super().get_queryset()
-    #     return query_set.filter(category__name="خوراکی")
+    def get_queryset(self):
+        query_set = super().get_queryset()
+        if self.request.GET.get('q', None):
+            query_set = query_set.filter(name__contains=self.request.GET.get('q', None))
+        if self.request.GET.get('min_price', None):
+            query_set = query_set.filter(price__gt=int(self.request.GET.get('min_price', None)))
+        if self.request.GET.get('max_price', None):
+            query_set = query_set.filter(price__lt=int(self.request.GET.get('max_price', None)))
+
+        return query_set
+
     def get_paginate_by(self, queryset):
         """
         Get the number of items to paginate by, or ``None`` for no pagination.

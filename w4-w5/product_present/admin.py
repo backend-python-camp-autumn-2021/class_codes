@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from . import  models
+from . import models
 
 
 class HandProductModelAdmin(admin.ModelAdmin):
@@ -41,6 +41,13 @@ class HandProductModelAdmin(admin.ModelAdmin):
         return True
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and obj.supplier.user != request.user:
+            return False
+        return True
+
+    def has_add_permission(self, request, obj=None):
         if request.user.is_superuser:
             return True
         if obj is not None and obj.supplier.user != request.user:
