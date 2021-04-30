@@ -19,7 +19,7 @@ class HandProductListView(ListView):
     # queryset = HandProduct.objects.filter(category__name="خوراکی")
 
     def get_queryset(self):
-        query_set = super().get_queryset()
+        query_set = super().get_queryset().filter(active=True)
         if self.request.GET.get('q', None):
             query_set = query_set.filter(name__contains=self.request.GET.get('q', None))
         if self.request.GET.get('min_price', None):

@@ -11,6 +11,7 @@ User = get_user_model()
 
 class HandProductCat(models.Model):
     name = models.CharField(max_length=255)
+    cat = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -35,6 +36,7 @@ class HandProduct(models.Model):
     img_three = models.ImageField(upload_to="hand_product/", null=True, blank=True)
     video_description = models.FileField(upload_to='hand_product_video/', null=True, blank=True, validators=[file_size_validator])
     slug = models.SlugField(unique=True, null=True, blank=True)
+    active = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name}"

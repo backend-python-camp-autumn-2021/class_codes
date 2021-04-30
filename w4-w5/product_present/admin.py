@@ -13,7 +13,7 @@ class HandProductModelAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return self.exclude
         else:
-            return self.exclude + ['supplier']
+            return self.exclude + ['supplier', 'active']
 
     def save_model(self, request, obj, form, change):
         if not form.fields.get('supplier', None):
