@@ -1,13 +1,13 @@
 from xml.etree.ElementInclude import include
 
 from django.contrib import admin
-from django.http import HttpResponse
+from django.shortcuts import render
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 def index(request):
-    return HttpResponse(f"Home page {request.user.email}")
+    return render(request, "index.html", {})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
