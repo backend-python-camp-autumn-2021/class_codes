@@ -37,6 +37,7 @@ class HandProduct(models.Model):
     video_description = models.FileField(upload_to='hand_product_video/', null=True, blank=True, validators=[file_size_validator])
     slug = models.SlugField(unique=True, null=True, blank=True)
     active = models.BooleanField(default=False)
+    discount_rate = models.SmallIntegerField(default=0)
 
     def __str__(self):
         return f"{self.name}"
@@ -45,6 +46,10 @@ class HandProduct(models.Model):
         if not self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
         return super().save(*args, **kwargs)
+
+    def price_after_discount(self):
+        new_price = int(self.price - (self.price * self.discount_rate)/100)
+        return new_price
 
 
 class HandProductComment(models.Model):

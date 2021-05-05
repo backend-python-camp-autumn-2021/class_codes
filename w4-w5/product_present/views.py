@@ -15,7 +15,7 @@ class HandProductListView(ListView):
     model = HandProduct
     template_name = "product_present/product_list.html"
     context_object_name = 'hand_products'
-    paginate_by = 3
+    paginate_by = 10
     # queryset = HandProduct.objects.filter(category__name="خوراکی")
 
     def get_queryset(self):
@@ -62,7 +62,7 @@ class CommentFormView(View):
 
     def post(self, request, id):
         if self.comment_instance:
-            form = CommentForm(instance = self.comment_instance)
+            form = CommentForm(data=request.POST, instance = self.comment_instance)
         else:
             form = CommentForm(request.POST)
             form.instance.user = request.user

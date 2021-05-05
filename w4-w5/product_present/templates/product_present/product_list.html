@@ -1,4 +1,5 @@
 {% extends "product_present/base_product_site.html" %}
+{% load product_tags %}
 
 
 
@@ -40,22 +41,46 @@
 
 
 {% block handproduct %}
-     <section class="testimonials text-center bg-light">
-            <div class="container">
-                <h2 class="mb-5">Products...</h2>
-                <div class="row">
-                {% for product in hand_products %}
-                    <div class="col-lg-4">
-                        <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                            <a href="{% url 'hand-product-detail' product.slug %}"><img class="img-fluid rounded-circle mb-3" src="{{ product.img_one.url }}" alt="..." /></a>
-                            <h5>{{ product.name }}</h5>
-                            <p class="font-weight-light mb-0">description: {{ product.description|truncatechars:25 }}</p>
-                        </div>
+    <div class="container">
+        <h3 class="h3">Products... </h3>
+        <div class="row">
+            {% for product in hand_products %}
+            <div class="col-md-2 col-sm-4 mb-2">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <a href="{% url 'hand-product-detail' product.slug %}   ">
+                            <img class="pic-1" src="{{ product.img_one.url }}">
+                            <img class="pic-2" src="{{ product.img_one.url }}">
+                        </a>
+                        <ul class="social">
+                            <li><a href="" data-tip="Quick View"><i class="fa fa-search"></i></a></li>
+                            <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
+                            <li><a href="{% url 'add_cart' product.id %}" data-tip="Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                        {% if product.discount_rate %}
+                        <span class="product-new-label">Sale</span>
+                        <span class="product-discount-label">{{ product.discount_rate }}%</span>
+                        {% endif %}
                     </div>
-                {% endfor %}
+                    <ul class="rating">
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star disable"></li>
+                        <li style="color: red">{% product_rate product.id %}</li>
+                    </ul>
+                    <div class="product-content">
+                        <h3 class="title"><a href="{% url 'hand-product-detail' product.slug %}">{{ product.name }}</a></h3>
+                        <div class="price">{{ product.price_after_discount }}
+                            <span>{{ product.price }}</span>
+                        </div>
+                        <a class="add-to-cart" href="{% url 'add_cart' product.id %}">+ Add To Cart</a>
+                    </div>
                 </div>
             </div>
-        </section>
+            {% endfor %}
+        </div>
+    </div>
+
     <br><br>
     <div class="text-center pagination">
             <ul>
@@ -81,9 +106,9 @@
             {#    </form>#}
         <form action="{% url 'hand-product-list' %}" method="get">
             <select id="pagination" name="paginate_by" onchange="this.form.submit();">
-                <option value="3">3</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
+                <option value="10">10 item in page</option>
+                <option value="20">20 item in page</option>
+                <option value="30">30 item in page</option>
             </select>
         </form>
     </div>

@@ -77,7 +77,8 @@ class UserAddress(models.Model):
 
     def __str__(self):
         return f"{self.user.user.email} - city: {self.city}"
-    
+
+
 class PriorityUserAddress(models.Model):
     """
 

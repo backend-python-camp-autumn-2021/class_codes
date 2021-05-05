@@ -21,5 +21,8 @@ def product_rate(data):
     except IntegrityError as e:
         raise str(e)
 
-    return rate['product_rate']
+    if rate['product_rate']:
+        return str(round(rate['product_rate'], 2))
+    else:
+        return "3.0"
 
