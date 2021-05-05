@@ -15,7 +15,7 @@ class HandProductListView(ListView):
     model = HandProduct
     template_name = "product_present/product_list.html"
     context_object_name = 'hand_products'
-    paginate_by = 10
+    paginate_by = 3
     # queryset = HandProduct.objects.filter(category__name="خوراکی")
 
     def get_queryset(self):

@@ -42,7 +42,7 @@
 
 {% block handproduct %}
     <div class="container">
-        <h3 class="h3">Products... </h3>
+        <h3 id="products" class="h3">Products... </h3>
         <div class="row">
             {% for product in hand_products %}
             <div class="col-md-2 col-sm-4 mb-2">
@@ -82,37 +82,58 @@
     </div>
 
     <br><br>
-    <div class="text-center pagination">
-            <ul>
-                {% if page_obj.has_previous %}
-                    <li><a href="?page=1">&laquo; first</a></li>
-                    <li><a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
-                {% endif %}
-
-                <li>
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                </li>
-
-                {% if page_obj.has_next %}
-                    <li><a href="?page={{ page_obj.next_page_number }}">next</a></li>
-                    <li><a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
-                {% endif %}
-            </ul>
-
+{#    <div class="text-center pagination">#}
+{#            <ul>#}
+{#                {% if page_obj.has_previous %}#}
+{#                    <li><a href="?page=1">&laquo; first</a></li>#}
+{#                    <li><a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>#}
+{#                {% endif %}#}
+{##}
+{#                <li>#}
+{#                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}#}
+{#                </li>#}
+{##}
+{#                {% if page_obj.has_next %}#}
+{#                    <li><a href="?page={{ page_obj.next_page_number }}">next</a></li>#}
+{#                    <li><a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>#}
+{#                {% endif %}#}
+{#            </ul>#}
+{##}
             {#    <form action="{% url 'hand-product-list' %}" method="get">#}
             {#        {% csrf_token %}#}
             {#        <input type="text" name="paginate_by">#}
             {#        <input type="submit" value="send">#}
             {#    </form>#}
-        <form action="{% url 'hand-product-list' %}" method="get">
-            <select id="pagination" name="paginate_by" onchange="this.form.submit();">
-                <option value="10">10 item in page</option>
-                <option value="20">20 item in page</option>
-                <option value="30">30 item in page</option>
-            </select>
-        </form>
-    </div>
+{#        <form action="{% url 'hand-product-list' %}" method="get">#}
+{#            <select id="pagination" name="paginate_by" onchange="this.form.submit();">#}
+{#                <option value="10">10 item in page</option>#}
+{#                <option value="20">20 item in page</option>#}
+{#                <option value="30">30 item in page</option>#}
+{#            </select>#}
+{#        </form>#}
+{#    </div>#}
 
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a title="first page" class="page-link" href="?page=1#products" tabindex="-1"><<</a>
+        </li>
+        <li class="page-item">
+          <a title="previus page" class="page-link" href="?page={{ page_obj.previous_page_number }}#products" tabindex="-1">{{ page_obj.previous_page_number }}</a>
+        </li>
+    {% endif %}
+
+      <li class="page-item active"><a title="current page" class="page-link" href="#products">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+      {% if page_obj.has_next %}
+        <li class="page-item"><a title="next page" class="page-link" href="?page={{ page_obj.next_page_number }}#products">{{ page_obj.next_page_number }}</a></li>
+        <li class="page-item">
+          <a class="page-link" title="last page" href="?page={{ page_obj.paginator.num_pages }}#products" tabindex="-1">>></a>
+        </li>
+      {% endif %}
+
+  </ul>
+</nav>
 {% endblock handproduct %}
 
 

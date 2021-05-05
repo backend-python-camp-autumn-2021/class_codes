@@ -9,7 +9,10 @@ from .models import HandProductCartItem
 def hand_product_show_cart(request):
     cart_items = request.cart.cart_items.all()
     #TODO function can calculate shipping
-    shipping = 10000
+    shipping = 0
+    if cart_items:
+        shipping = 10000
+
     total = request.cart.cart_summation + shipping
     context = {
         'cart_items': cart_items,
