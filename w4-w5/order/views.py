@@ -24,6 +24,7 @@ def hand_product_show_cart(request):
 
 @login_required(login_url='user-view', redirect_field_name='next')
 def hand_product_add_cart(request, product_id):
+    #TODO check existance!
     try:
         if request.cart.cart_items.filter(product__id=product_id).exists():
             cart_item = request.cart.cart_items.all().get(product__id=product_id)
