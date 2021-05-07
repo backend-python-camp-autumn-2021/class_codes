@@ -3,11 +3,12 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import status
+from rest_framework.exceptions import APIException
 
 from .models import Todo
-from .serializers import UserSerializer
+from .serializers import UserSerializer, TodoListSerializer, TodoDetailSerializer
 
 
 # class UsersTodoListView(ListCreateAPIView):
@@ -31,3 +32,31 @@ class UsersTodoListViewBaBadBakhti(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TodoList(ListCreateAPIView):
+    serializer_class = TodoListSerializer
+
+    def get_queryset(self):
+        # queryset = super().get_queryset()
+        if not self.request.query_params.get("username", None):
+            raise APIException(
+                detail="username field needed in url params", code=400)
+        username = self.request.query_params.get("username")
+        queryset = Todo.objects.filter(user__username=username)
+        print(queryset)
+        return queryset
+
+    def get_serializer_context(self):
+        """
+        Extra context provided to the serializer class.
+        """
+        serializer_context = super().get_serializer_context()
+        serializer_context["username"] = self.request.query_params.get(
+            "username")
+        return serializer_context
+
+
+class TodoDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoDetailSerializer

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 from rest_framework import serializers
 
@@ -22,3 +23,20 @@ class UserSerializer(serializers.ModelSerializer):
         for todo in validated_data["todos"]:
             Todo.objects.create(user=instance, **todo)
         return instance
+
+
+class TodoListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ['url', 'title', 'due_date']
+
+    def create(self, validated_data):
+        user = get_object_or_404(User, username=self.context["username"])
+        todo = Todo.objects.create(user=user, **validated_data)
+        return todo
+
+
+class TodoDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = "__all__"
