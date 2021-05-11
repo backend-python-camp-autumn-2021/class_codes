@@ -1,3 +1,7 @@
+from rest_framework.authtoken.models import Token
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.conf import settings
 from datetime import datetime, timedelta
 
 from django.db import models
@@ -16,3 +20,10 @@ class Todo(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.title}"
+
+
+# token generation after signup signal
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

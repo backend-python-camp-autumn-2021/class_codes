@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import status
 from rest_framework.exceptions import APIException
-
+from rest_framework.authentication import BaseAuthentication, SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import Todo
 from .serializers import UserSerializer, TodoListSerializer, TodoDetailSerializer
 
@@ -35,6 +36,8 @@ class UsersTodoListViewBaBadBakhti(APIView):
 
 
 class TodoList(ListCreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = TodoListSerializer
 
     def get_queryset(self):
