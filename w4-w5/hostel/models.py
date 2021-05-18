@@ -14,9 +14,6 @@ class HostelCategory(models.Model):
         return self.name
 
 
-class HostImage(models.Model):
-    img = models.ImageField(upload_to="host/", null=True, blank=True)
-
 
 class HostStateAddress(models.Model):
     state = models.CharField('استان', max_length=255)
@@ -40,10 +37,14 @@ class Host(models.Model):
     address = models.ForeignKey(HostAddress, on_delete=models.CASCADE)
     owner = models.ForeignKey(HostelOwner, on_delete=models.CASCADE)
     reserved = models.BooleanField(default=False)
-    img = models.ForeignKey(HostImage, on_delete=models.CASCADE)
     chek_in_time = models.CharField(max_length=50)
     chek_out_time = models.CharField(max_length=50)
     max_number_guests = models.SmallIntegerField(default=2)
+
+
+class HostImage(models.Model):
+    host = models.ForeignKey(Host, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to="host/", null=True, blank=True)
 
 
 class HostComment(models.Model):
