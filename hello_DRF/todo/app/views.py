@@ -3,11 +3,14 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.authentication import BaseAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .models import Todo
 from .serializers import UserSerializer, TodoListSerializer, TodoDetailSerializer
 
@@ -36,30 +39,41 @@ class UsersTodoListViewBaBadBakhti(APIView):
 
 
 class TodoList(ListCreateAPIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = TodoListSerializer
 
     def get_queryset(self):
         # queryset = super().get_queryset()
-        if not self.request.query_params.get("username", None):
-            raise APIException(
-                detail="username field needed in url params", code=400)
-        username = self.request.query_params.get("username")
-        queryset = Todo.objects.filter(user__username=username)
+        # if not self.request.query_params.get("username", None):
+        #     raise APIException(
+        #         detail="username field needed in url params", code=400)
+        # username = self.request.query_params.get("username")
+        # queryset = Todo.objects.filter(user__username=username)
+        queryset = Todo.objects.filter(user=self.request.user)
         print(queryset)
         return queryset
 
-    def get_serializer_context(self):
-        """
-        Extra context provided to the serializer class.
-        """
-        serializer_context = super().get_serializer_context()
-        serializer_context["username"] = self.request.query_params.get(
-            "username")
-        return serializer_context
+    # def get_serializer_context(self):
+    #     """
+    #     Extra context provided to the serializer class.
+    #     """
+    #     serializer_context = super().get_serializer_context()
+    #     # serializer_context["username"] = self.request.query_params.get(
+    #     #     "username")
+    #     # serializer_context.update({"user": self.request.user})
+    #     return serializer_context
 
 
 class TodoDetail(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Todo.objects.all()
+    serializer_class = TodoDetailSerializer
+
+
+class DeleteTodoView(DestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Todo.objects.all()
     serializer_class = TodoDetailSerializer

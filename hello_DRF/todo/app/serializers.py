@@ -28,11 +28,12 @@ class UserSerializer(serializers.ModelSerializer):
 class TodoListSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Todo
-        fields = ['url', 'title', 'due_date']
+        fields = ['id', 'url', 'title', 'due_date']
 
     def create(self, validated_data):
-        user = get_object_or_404(User, username=self.context["username"])
-        todo = Todo.objects.create(user=user, **validated_data)
+        # user = get_object_or_404(User, username=self.context["username"])
+        todo = Todo.objects.create(
+            user=self.context["request"].user, **validated_data)
         return todo
 
 
