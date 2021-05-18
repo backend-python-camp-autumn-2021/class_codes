@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'user',
     'product_present',
 
-
-
 ]
 
 INTERNAL_IPS = [

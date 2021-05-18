@@ -1,7 +1,7 @@
 from xml.etree.ElementInclude import include
 
 from django.contrib import admin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,6 +16,7 @@ def index(request):
     # if request.user.is_authenticated and not cache.get(request.user, None):
     #     cache.set(request.user, request.cart.cart_items_cardinality)
     return render(request, "index.html",{})
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

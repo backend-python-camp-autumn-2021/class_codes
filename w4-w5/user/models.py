@@ -98,3 +98,12 @@ class HandProductSuplier(models.Model):
 
     def __str__(self):
         return self.nickname
+
+
+class HostelOwner(models.Model):
+    user = models.OneToOneField(User, related_name="hostel_owner", on_delete=models.RESTRICT)
+    nickname = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.nickname
+
