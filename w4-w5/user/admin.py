@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib import admin
 
-from .models import Profile, UserAddress, HandProductSuplier
+from .models import Profile, UserAddress, HandProductSuplier, HostelOwner
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
@@ -49,3 +49,4 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(Profile)
 admin.site.register(UserAddress)
 admin.site.register(HandProductSuplier)
+admin.site.register(HostelOwner)
