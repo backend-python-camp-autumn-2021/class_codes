@@ -1,0 +1,88 @@
+[{
+        "model": "books.author",
+        "pk": 1,
+        "fields": {
+            "name": "George Orwell",
+            "birth_year": "1920"
+        }
+    },
+    {
+        "model": "books.author",
+        "pk": 2,
+        "fields": {
+            "name": "J.D. Salinger",
+            "birth_year": "1910"
+        }
+    },
+    {
+        "model": "books.author",
+        "pk": 3,
+        "fields": {
+            "name": "Scott Fitzgerald",
+            "birth_year": "1915"
+        }
+    },
+    {
+        "model": "books.author",
+        "pk": 4,
+        "fields": {
+            "name": "Kurt Vonnegut",
+            "birth_year": "1900"
+
+        }
+    },
+    {
+        "model": "books.author",
+        "pk": 5,
+        "fields": {
+            "name": "Vladimir Nabakov",
+            "birth_year": "1950"
+
+        }
+    },
+    {
+        "model": "books.author",
+        "pk": 6,
+        "fields": {
+            "name": "William Faulkner",
+            "birth_year": "2026"
+
+        }
+    },
+    {
+        "model": "books.author",
+        "pk": 7,
+        "fields": {
+            "name": "Richard Yates",
+            "birth_year": "1999"
+
+        }
+    },
+    {
+        "model": "books.book",
+        "pk": 1,
+        "fields": {
+            "title": "1984",
+            "author": [1],
+            "published_date": "1980-2-1"
+        }
+    },
+    {
+        "model": "books.book",
+        "pk": 2,
+        "fields": {
+            "title": "khande dar shab",
+            "author": [3, 4],
+            "published_date": "2020-2-5"
+        }
+    },
+    {
+        "model": "books.book",
+        "pk": 3,
+        "fields": {
+            "title": "gerye dar ruz",
+            "author": [4, 5, 7],
+            "published_date": "2025-2-5"
+        }
+    }
+]
