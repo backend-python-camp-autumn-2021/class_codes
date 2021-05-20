@@ -44,21 +44,22 @@ class Query(ObjectType):
 class AuthorInput(graphene.InputObjectType):
     id = graphene.ID()
     name = graphene.String()
+    birth_year = graphene.Int()
 
 
 class CreateAuthor(graphene.Mutation):
     class Arguments:
         input = AuthorInput(required=True)
 
-    ok = graphene.Boolean()
+    created = graphene.Boolean()
     author = graphene.Field(AuthorType)
 
     @staticmethod
     def mutate(root, info, input=None):
-        ok = True
-        author_obj = Author(name=input.name)
+        created = True
+        author_obj = Author(name=input.name, birth_year=input.birth_year)
         author_obj.save()
-        return CreateAuthor(ok=ok, author=author_obj)
+        return CreateAuthor(created=created, author=author_obj)
 
 
 class UpdateAuthor(graphene.Mutation):
@@ -66,19 +67,19 @@ class UpdateAuthor(graphene.Mutation):
         id = graphene.Int(required=True)
         input = AuthorInput(required=True)
 
-    ok = graphene.Boolean()
+    created = graphene.Boolean()
     actor = graphene.Field(AuthorType)
 
     @staticmethod
     def mutate(root, info, id, input=None):
-        ok = False
+        created = False
         author_obj = Author.objects.get(pk=id)
         if author_obj:
-            ok = True
+            created = True
             author_obj.name = input.name
             author_obj.save()
-            return UpdateAuthor(ok=ok, author=author_obj)
-        return UpdateAuthor(ok=ok, author=None)
+            return UpdateAuthor(created=created, author=author_obj)
+        return UpdateAuthor(created=created, author=None)
 
 
 class Mutation(graphene.ObjectType):
