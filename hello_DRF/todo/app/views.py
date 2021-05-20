@@ -1,26 +1,31 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-
+from django.core.paginator import Paginator
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView, ListAPIView
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.authentication import BaseAuthentication, SessionAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Todo
 from .serializers import UserSerializer, TodoListSerializer, TodoDetailSerializer
+from .permissions import IsSuperUser
 
 
-# class UsersTodoListView(ListCreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
+class UsersTodoListView(ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filterset_fields = ['username']
 
 
 class UsersTodoListViewBaBadBakhti(APIView):
+    # permission_classes = [IsSuperUser]
+    # authentication_classes = [TokenAuthentication]
 
     def get(self, request):
         queryset = User.objects.all()
