@@ -41,4 +41,49 @@ class Query(ObjectType):
         return Book.objects.all()
 
 
-schema = graphene.Schema(query=Query)
+class AuthorInput(graphene.InputObjectType):
+    id = graphene.ID()
+    name = graphene.String()
+
+
+class CreateAuthor(graphene.Mutation):
+    class Arguments:
+        input = AuthorInput(required=True)
+
+    ok = graphene.Boolean()
+    author = graphene.Field(AuthorType)
+
+    @staticmethod
+    def mutate(root, info, input=None):
+        ok = True
+        author_obj = Author(name=input.name)
+        author_obj.save()
+        return CreateAuthor(ok=ok, author=author_obj)
+
+
+class UpdateAuthor(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)
+        input = AuthorInput(required=True)
+
+    ok = graphene.Boolean()
+    actor = graphene.Field(AuthorType)
+
+    @staticmethod
+    def mutate(root, info, id, input=None):
+        ok = False
+        author_obj = Author.objects.get(pk=id)
+        if author_obj:
+            ok = True
+            author_obj.name = input.name
+            author_obj.save()
+            return UpdateAuthor(ok=ok, author=author_obj)
+        return UpdateAuthor(ok=ok, author=None)
+
+
+class Mutation(graphene.ObjectType):
+    create_author = CreateAuthor.Field()
+    update_author = UpdateAuthor.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
