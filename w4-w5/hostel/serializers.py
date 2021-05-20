@@ -24,8 +24,9 @@ class HostelAddressSerializers(serializers.ModelSerializer):
 
 
 class HostListSerializer(serializers.HyperlinkedModelSerializer):
-    host_address = HostelAddressSerializers(read_only=True)
+    # host_address = HostelAddressSerializers(read_only=True)
     owner = serializers.StringRelatedField(read_only=True)
+    host_address = serializers.StringRelatedField(read_only=True)
     cat = serializers.StringRelatedField(read_only=True)
 
     class Meta:
