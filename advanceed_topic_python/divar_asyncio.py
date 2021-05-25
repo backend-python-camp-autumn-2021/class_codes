@@ -1,3 +1,4 @@
+import aiohttp
 from aiohttp import ClientSession
 import asyncio
 import json
@@ -19,17 +20,35 @@ async def get_json(client, url):
 
 
 async def get_divar_top(client, query_parameter):
-    content = await get_json(client, 'https://api.divar.ir/v8/web-search/tehran' + query_parameter)
-    data = json.loads(content.decode('utf-8'))
-    for elm in data['widget_list'][1:6]:
-        title = elm['data']['title']
-        description = elm['data']['description']
-        image_url = elm['data']['image']
-        district = elm['data']['district']
-        logging.info('Title: ' + title + ' : ' + 'Des: ' + description +
-                     " img_url: " + '(' + image_url + ')' + " District: " + district + "\n")
-    logging.info('DONE:' + query_parameter + '\n'+'\n')
-    await asyncio.sleep(10)
+    try:
+        content = await get_json(client, 'https://api.divar.ir/v8/web-search/tehran' + query_parameter)
+    except (
+        aiohttp.ClientError,
+        aiohttp.http_exceptions.HttpProcessingError,
+    ) as e:
+        logging.error(
+            "aiohttp exception for %s [%s]: %s",
+            query_parameter,
+            getattr(e, "status", None),
+            getattr(e, "message", None),
+        )
+        return
+    except Exception as e:
+        logging.error(
+            "Non-aiohttp exception occured:  %s", getattr(e, "__dict__", {})
+        )
+        return
+    else:
+        data = json.loads(content.decode('utf-8'))
+        for elm in data['widget_list'][1:6]:
+            title = elm['data']['title']
+            description = elm['data']['description']
+            image_url = elm['data']['image']
+            district = elm['data']['district']
+            logging.info('Title: ' + title + ' : ' + 'Des: ' + description +
+                         " img_url: " + '(' + image_url + ')' + " District: " + district + "\n")
+        logging.info('DONE:' + query_parameter + '\n'+'\n')
+        await asyncio.sleep(10)
 
 
 async def main(loop):
