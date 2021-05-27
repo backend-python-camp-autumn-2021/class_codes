@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, UpdateView, DeleteView, C
 
 from .models import HandProduct, HandProductComment
 from .forms import CommentForm
-
+from .tasks import summation
 
 class HandProductListView(ListView):
     model = HandProduct
@@ -91,3 +91,8 @@ def delete_comment_view(request, id):
         return HttpResponse("be khubi va khoshi hazfid!")
     else:
         return HttpResponseForbidden("<h1>403 Forbidden</h1>")
+
+
+def index_summation_celery(request):
+    result = summation.delay(1, 5)
+    return HttpResponse(f"hello celery {result}")

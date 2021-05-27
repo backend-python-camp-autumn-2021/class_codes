@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-
+    'django_celery_beat',
     'crispy_forms',
     'debug_toolbar',
 
@@ -173,4 +173,10 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": 10.0,
         "args": ("ashkan",),
     },
+    "hello_ghamar":{
+        "task": "product_present.tasks.hello_task",
+        "schedule": crontab(minute="*/1"),
+        # "schedule": 10.0,
+        "args": ("ghamar",),
+    }
 }
