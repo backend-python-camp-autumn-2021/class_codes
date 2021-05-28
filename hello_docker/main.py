@@ -1,4 +1,5 @@
 from typing import Optional
+import aiofiles
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -13,7 +14,10 @@ class Item(BaseModel):
 
 
 @app.get("/")
-def read_root():
+async def read_root():
+    print("hello")
+    async with aiofiles.open('filename.txt', mode='a') as f:
+        await f.write("ashkan \n")
     return {"Hello": "World"}
 
 
