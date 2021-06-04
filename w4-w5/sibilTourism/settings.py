@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from celery.schedules import crontab
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -99,6 +100,7 @@ os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 #     }
 # }
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -184,7 +186,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": 10.0,
         "args": ("ashkan",),
     },
-    "hello_ghamar":{
+    "hello_ghamar": {
         "task": "product_present.tasks.hello_task",
         "schedule": crontab(minute="*/1"),
         # "schedule": 10.0,
