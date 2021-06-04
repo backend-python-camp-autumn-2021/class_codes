@@ -6,6 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 COPY . .
 
+ARG name
+
 RUN apk update \
     && apk update && apk add postgresql-dev gcc python3-dev musl-dev \
     && apk add --virtual build-deps \
